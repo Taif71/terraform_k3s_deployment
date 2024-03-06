@@ -1,18 +1,18 @@
 locals {
-    subnet_tags = {
-        for subnet in var.subnet_configs :
-        subnet.subnet_name => {
-            Name = subnet.subnet_name
-        }
+  subnet_tags = {
+    for subnet in var.subnet_configs :
+    subnet.subnet_name => {
+      Name = subnet.subnet_name
     }
-    subnet_cidrs = {
-        for subnet in var.subnet_configs : 
-        subnet.subnet_name => subnet.subnet_cidr
-    }
-    subnet_public = {
-        for subnet in var.subnet_configs :
-        subnet.subnet_name => subnet.is_public
-    }
+  }
+  subnet_cidrs = {
+    for subnet in var.subnet_configs :
+    subnet.subnet_name => subnet.subnet_cidr
+  }
+  subnet_public = {
+    for subnet in var.subnet_configs :
+    subnet.subnet_name => subnet.is_public
+  }
 }
 
 resource "aws_vpc" "proidhi_vpc" {
@@ -25,19 +25,19 @@ resource "aws_vpc" "proidhi_vpc" {
 resource "aws_subnet" "proidhi_subnet" {
   for_each = { for idx, subnet in var.subnet_configs : idx => subnet }
 
-  vpc_id = aws_vpc.proidhi_vpc.id
-  cidr_block = local.subnet_cidrs[each.value.subnet_name]
+  vpc_id                  = aws_vpc.proidhi_vpc.id
+  cidr_block              = local.subnet_cidrs[each.value.subnet_name]
   map_public_ip_on_launch = local.subnet_public[each.value.subnet_name]
 
   tags = local.subnet_tags[each.value.subnet_name]
 }
 
 resource "aws_internet_gateway" "gw" {
-    vpc_id = aws_vpc.proidhi_vpc.id
+  vpc_id = aws_vpc.proidhi_vpc.id
 
-    tags = {
-        Name = var.gw_tags
-    }
+  tags = {
+    Name = var.gw_tags
+  }
 }
 
 resource "aws_route_table" "public_rt" {
@@ -49,19 +49,19 @@ resource "aws_route_table" "private rt" {
 }
 
 resource "aws_route" "public_internet_gateway" {
-  route_table_id = aws_route_table.public_rt.id
+  route_table_id         = aws_route_table.public_rt.id
   destination_cidr_block = var.gw_cidr
-  gateway_id = aws_internet_gateway.gw.id
+  gateway_id             = aws_internet_gateway.gw.id
 }
 
 resource "aws_route_table_association" "rt_association" {
-  for_each = aws_subnet.proidhi_subnet
-  subnet_id = each.value.id
+  for_each       = aws_subnet.proidhi_subnet
+  subnet_id      = each.value.id
   route_table_id = each.value.map_public_ip_on_launch ? aws_route_table.public_rt.id : aws_route_table.private_rt.id
 }
 
 resource "aws_main_route_table_association" "public_rt" {
-  vpc_id = aws_vpc.proidhi_vpc.id
+  vpc_id         = aws_vpc.proidhi_vpc.id
   route_table_id = aws_route_table.public_rt.id
 }
 
