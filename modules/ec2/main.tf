@@ -1,5 +1,5 @@
 resource "tls_private_key" "tls_key" {
-  algorithm = "rsa"
+  algorithm = "RSA"
   rsa_bits  = 4096
 }
 
@@ -46,5 +46,5 @@ resource "aws_instance" "private" {
   security_groups = [
     var.security_group_id,
   ]
-  depends_on = [aws_key_pair.example, tls_private_key.example, aws_s3_object.s3_object]
+  depends_on = [aws_key_pair.aws_key, tls_private_key.tls_key, aws_s3_object.s3_object]
 }

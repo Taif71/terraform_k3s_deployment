@@ -22,7 +22,7 @@ resource "aws_vpc" "poridhi_vpc" {
   }
 }
 
-resource "aws_subnet" "proidhi_subnet" {
+resource "aws_subnet" "poridhi_subnet" {
   for_each = { for idx, subnet in var.subnet_configs : idx => subnet }
 
   vpc_id                  = aws_vpc.poridhi_vpc.id
@@ -55,7 +55,7 @@ resource "aws_route" "public_internet_gateway" {
 }
 
 resource "aws_route_table_association" "rt_association" {
-  for_each       = aws_subnet.proidhi_subnet
+  for_each       = aws_subnet.poridhi_subnet
   subnet_id      = each.value.id
   route_table_id = each.value.map_public_ip_on_launch ? aws_route_table.public_rt.id : aws_route_table.private_rt.id
 }

@@ -24,7 +24,9 @@ terraform {
 
 # Configure aws provider
 provider "aws" {
-  region = "us-east-1"
+  region     = "us-east-1"
+  access_key = ""
+  secret_key = ""
 }
 
 module "dev_infra" {
