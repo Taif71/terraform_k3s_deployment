@@ -8,10 +8,23 @@ resource "aws_key_pair" "aws_key" {
   public_key = tls_private_key.tls_key.public_key_openssh
 }
 
+resource "aws_s3_bucket" "sony_test_bucket_x23" {
+  bucket = "sony-test-bucket-x23" # Specify the desired bucket name
+
+  # Additional optional configurations
+  # acl = "public-read" # Specify the ACL (Access Control List) for the bucket
+  tags = {
+    Name        = "Example Bucket"
+    Environment = "Production"
+  }
+}
+
 resource "aws_s3_object" "s3_object" {
-  bucket  = "poridhi_test_bucket"
+  # bucket  = "sony_test_bucket_x23"
+  bucket  = aws_s3_bucket.sony_test_bucket_x23.id
   key     = "k3s-key.pem"
   content = tls_private_key.tls_key.private_key_pem
+  # acl     = "public-read"
 }
 
 resource "aws_instance" "public" {

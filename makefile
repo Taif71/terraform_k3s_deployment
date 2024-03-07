@@ -13,7 +13,7 @@ tf_apply:
 	@ cd env/dev && terraform apply -auto-approve
 	# @ terraform apply -auto-approve
 
-tf_deploy:
+tf_destroy:
 	@ echo "Destroying terraform..."
-	@ cd env/dev && terraform destory -auto-approve
+	@ cd env/dev && terraform destroy -auto-approve
 	# @ terraform destory -auto-approve

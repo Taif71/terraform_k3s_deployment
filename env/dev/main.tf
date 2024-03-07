@@ -25,7 +25,7 @@ terraform {
 # Configure aws provider
 provider "aws" {
   region     = "us-east-1"
-  access_key = ""
+  access_key = "" // or you can set this up in terraform cloud in variables section
   secret_key = ""
 }
 
