@@ -1,13 +1,23 @@
+# terraform {
+#   backend "s3" {
+#     bucket = ""
+#     key    = ""
+#     region = "us-east-1"
+#   }
+#   required_providers {
+#     aws = {
+#       source  = "hashicorp/aws",
+#       version = "~> 5.0"
+#     }
+#   }
+# }
+
 terraform {
-  backend "s3" {
-    bucket = ""
-    key    = ""
-    region = "us-east-1"
-  }
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws",
-      version = "~> 5.0"
+  cloud {
+    organization = "k3s_org"
+
+    workspaces {
+      name = "k3s_automation_prod"
     }
   }
 }

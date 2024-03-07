@@ -46,5 +46,5 @@ resource "aws_instance" "private" {
   security_groups = [
     var.security_group_id,
   ]
-  depends_on = [aws_key_pair.example, tls_private_key.example, aws_s3_object.object]
+  depends_on = [aws_key_pair.example, tls_private_key.example, aws_s3_object.s3_object]
 }

@@ -15,7 +15,7 @@ locals {
   }
 }
 
-resource "aws_vpc" "proidhi_vpc" {
+resource "aws_vpc" "poridhi_vpc" {
   cidr_block = var.vpc_cidr
   tags = {
     Name = var.vpc_name
@@ -25,7 +25,7 @@ resource "aws_vpc" "proidhi_vpc" {
 resource "aws_subnet" "proidhi_subnet" {
   for_each = { for idx, subnet in var.subnet_configs : idx => subnet }
 
-  vpc_id                  = aws_vpc.proidhi_vpc.id
+  vpc_id                  = aws_vpc.poridhi_vpc.id
   cidr_block              = local.subnet_cidrs[each.value.subnet_name]
   map_public_ip_on_launch = local.subnet_public[each.value.subnet_name]
 
@@ -33,7 +33,7 @@ resource "aws_subnet" "proidhi_subnet" {
 }
 
 resource "aws_internet_gateway" "gw" {
-  vpc_id = aws_vpc.proidhi_vpc.id
+  vpc_id = aws_vpc.poridhi_vpc.id
 
   tags = {
     Name = var.gw_tags
@@ -41,11 +41,11 @@ resource "aws_internet_gateway" "gw" {
 }
 
 resource "aws_route_table" "public_rt" {
-  vpc_id = aws_vpc.proidhi_vpc.id
+  vpc_id = aws_vpc.poridhi_vpc.id
 }
 
-resource "aws_route_table" "private rt" {
-  vpc_id = aws_vpc.proidhi_vpc.id
+resource "aws_route_table" "private_rt" {
+  vpc_id = aws_vpc.poridhi_vpc.id
 }
 
 resource "aws_route" "public_internet_gateway" {
@@ -61,7 +61,7 @@ resource "aws_route_table_association" "rt_association" {
 }
 
 resource "aws_main_route_table_association" "public_rt" {
-  vpc_id         = aws_vpc.proidhi_vpc.id
+  vpc_id         = aws_vpc.poridhi_vpc.id
   route_table_id = aws_route_table.public_rt.id
 }
 
