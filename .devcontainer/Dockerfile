@@ -16,7 +16,11 @@ RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2
     unzip awscliv2.zip && \
     ./aws/install
 
-# Copy the Terraform files to the container's working directory
-# Set the working directory to /terraform
-WORKDIR /terraform
-COPY . /terraform
+# # Copy the Terraform files to the container's working directory
+# # Set the working directory to /terraform
+# WORKDIR /terraform
+# COPY . /terraform
+
+# Set up direnv hook
+RUN echo 'eval "$(direnv hook bash)"' >> ~/.bashrc
+RUN echo 'eval "$(direnv hook bash)"' >> ~/.bash_profile
